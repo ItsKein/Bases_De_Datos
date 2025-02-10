@@ -40,3 +40,47 @@ FROM city
 JOIN country ON city.countrycode = country.code
 ORDER BY country.surfacearea DESC
 LIMIT 10;
+
+SELECT c.Name
+FROM country c
+JOIN countrylanguage cl ON c.Code = cl.CountryCode
+WHERE cl.Language = 'French' AND cl.IsOfficial = 'T';
+
+SELECT c.Name
+FROM country c
+JOIN countrylanguage cl ON c.Code = cl.CountryCode
+WHERE cl.Language = 'English' AND cl.IsOfficial = 'F';
+
+SELECT c.Name
+FROM country c
+JOIN population_history ph ON c.Code = ph.CountryCode
+WHERE ph.Year = YEAR(CURDATE()) - 50
+AND c.Population >= 3 * (SELECT Population FROM population_history WHERE CountryCode = c.Code AND Year = YEAR(CURDATE()) - 50);
+
+SELECT c.Name, c.Continent, c.GNP
+FROM country c
+WHERE c.GNP = (
+    SELECT MAX(GNP)
+    FROM country
+    WHERE Continent = c.Continent
+)
+ORDER BY c.Continent;
+
+SELECT Name, LifeExpectancy
+FROM country
+WHERE LifeExpectancy < (
+    SELECT AVG(LifeExpectancy)
+    FROM country
+)
+ORDER BY LifeExpectancy ASC;
+
+SELECT Name, Capital
+FROM country
+WHERE Population > 100000000
+ORDER BY Population DESC;
+
+SELECT Continent, COUNT(*) AS CountryCount
+FROM country
+GROUP BY Continent
+ORDER BY CountryCount DESC
+LIMIT 1;
