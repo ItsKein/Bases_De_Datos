@@ -1,3 +1,4 @@
+/*Exploring the world*/
 use world;
 SHOW TABLES;
 SELECT country.name, countrylanguage.language
